@@ -11,10 +11,6 @@ var budgetController = (function () {
     this.value = value;
   };
 
-  var allExpenses = [];
-  var allIncomes = [];
-  var totalExpenses = 0;
-
   var data = {
     allItems: {
       exp: [],
