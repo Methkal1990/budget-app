@@ -21,6 +21,29 @@ var budgetController = (function () {
       inc: 0,
     },
   };
+
+  return {
+    addItem: function (type, des, val) {
+      var newItem, ID;
+      var typeData = data.allItems[type];
+      // create a new id
+      if (typeData.length > 0) {
+        ID = typeData[typeData.length - 1].id + 1;
+      } else {
+        ID = 0;
+      }
+      // create a new item based on the type 'inc' or 'exp'
+      if (type === "exp") {
+        newItem = new Expense(ID, des, val);
+      } else if (type === "inc") {
+        newItem = new Income(ID, des, val);
+      }
+      // push the new item to our data structure
+      typeData.push(newItem);
+      // return the new element
+      return newItem;
+    },
+  };
 })();
 
 var UIController = (function () {
@@ -44,7 +67,23 @@ var UIController = (function () {
   };
 })();
 
+// Global App Controller
 var controller = (function (budgetCtrl, UICtrl) {
+  // the function that will add new item to the app
+  var ctrlAddItem = function () {
+    // 1. get the field input data
+    var input = UICtrl.getInput();
+
+    // 2. add the item to the budget controller
+    var newItem = budgetController.addItem(
+      input.type,
+      input.description,
+      input.value,
+    );
+    // 3. add the item to the UI
+    // 4. calculate the budget
+    // 5. display the budget in the UI
+  };
   var setupEventListeners = function () {
     var DOM = UICtrl.getDOMStrings();
     document.querySelector(DOM.inputBtn).addEventListener("click", ctrlAddItem);
@@ -54,17 +93,6 @@ var controller = (function (budgetCtrl, UICtrl) {
         ctrlAddItem();
       }
     });
-  };
-
-  // the function that will add new item to the app
-  var ctrlAddItem = function () {
-    // 1. get the field input data
-    var input = UICtrl.getInput();
-
-    // 2. add the item to the budget controller
-    // 3. add the item to the UI
-    // 4. calculate the budget
-    // 5. display the budget in the UI
   };
 
   return {
